@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using HarmonyLib;
+using MetalUnitTooltip.Logic;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using Vintagestory.GameContent;
 
 namespace MetalUnitTooltip.Patches;
@@ -19,26 +19,13 @@ public class ItemNuggetTooltipPatch
         bool withDebugInfo
     )
     {
-        if (inSlot.Itemstack.Item is null)
+        var tooltipText = MetalUnitTooltipLogic.GetNuggetTooltipText(inSlot.Itemstack);
+
+        if (string.IsNullOrEmpty(tooltipText))
         {
             return;
         }
 
-        var totalMetalUnits = inSlot.Itemstack.StackSize * 5;
-
-        var tooltip = Lang.Get($"{ModConstants.ModId}:tooltipText", totalMetalUnits);
-
-        if (inSlot.Itemstack.Item.CombustibleProps is { } smeltInfo)
-        {
-            float itemsPerIngot = smeltInfo.SmeltedStack.ResolvedItemstack.StackSize
-                                  * 100f
-                                  / smeltInfo.SmeltedRatio;
-
-            var totalIngots = inSlot.Itemstack.StackSize / itemsPerIngot;
-
-            tooltip += Lang.Get($"{ModConstants.ModId}:ingotText", totalIngots.ToString("0.#"));
-        }
-
-        dsc.AppendLine(tooltip);
+        dsc.AppendLine(tooltipText);
     }
 }

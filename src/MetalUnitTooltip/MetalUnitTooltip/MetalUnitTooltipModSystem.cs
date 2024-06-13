@@ -6,7 +6,7 @@ namespace MetalUnitTooltip;
 // ReSharper disable once UnusedMember.Global
 public class MetalUnitTooltipModSystem : ModSystem
 {
-    private Harmony _harmony;
+    private Harmony _harmony = default!;
 
     public override void Start(ICoreAPI api)
     {

@@ -1,4 +1,5 @@
 {
   "tooltipText": "Total units: {0}",
-  "ingotText": " ({0} ingots)"
+  "tooltipIngotOne": " (1 ingot)",
+  "tooltipIngotMany": " ({0} ingots)"
 }

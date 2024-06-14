@@ -1,0 +1,13 @@
+{
+    "type": "code",
+    "modid": "bedspawn",
+    "name": "BedSpawn",
+    "authors": [
+        "ilan"
+    ],
+    "description": "Sets your \"return point\" when you sleep in a bed.",
+    "version": "1.0.0",
+    "dependencies": {
+        "game": "1.19.8"
+    }
+}

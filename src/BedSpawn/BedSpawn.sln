@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35005.142
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BedSpawn", "BedSpawn\BedSpawn.csproj", "{76C4C6C3-6401-4AE6-B9E3-D18EA72180EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeBuild", "ZZCakeBuild\CakeBuild.csproj", "{4F6281A0-8EB7-409C-8AE2-4B2D08CE57E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76C4C6C3-6401-4AE6-B9E3-D18EA72180EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C4C6C3-6401-4AE6-B9E3-D18EA72180EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C4C6C3-6401-4AE6-B9E3-D18EA72180EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C4C6C3-6401-4AE6-B9E3-D18EA72180EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F6281A0-8EB7-409C-8AE2-4B2D08CE57E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F6281A0-8EB7-409C-8AE2-4B2D08CE57E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F6281A0-8EB7-409C-8AE2-4B2D08CE57E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F6281A0-8EB7-409C-8AE2-4B2D08CE57E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2AB6F19C-5258-45FE-914F-127BC52FF587}
+	EndGlobalSection
+EndGlobal

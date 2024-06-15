@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using MetalRecycling.Configuration;
 using Vintagestory.API.Common;
+using Vintagestory.API.Server;
 
 namespace MetalRecycling;
 public class MetalRecyclingModSystem : ModSystem
@@ -9,20 +10,18 @@ public class MetalRecyclingModSystem : ModSystem
 
     private Harmony _harmony;
 
-    // Called on server and client
-    // Useful for registering block/entity classes on both sides
-    public override void Start(ICoreAPI api)
+    public override void StartServerSide(ICoreServerAPI api)
     {
         _harmony = new Harmony(ModConstants.ModId);
-
-        if (api.Side != EnumAppSide.Server)
-        {
-            return;
-        }
 
         Config = ModConfig.ReadConfig(api);
 
         _harmony.PatchCategory("Server");
+    }
+
+    public override bool ShouldLoad(EnumAppSide forSide)
+    {
+        return forSide == EnumAppSide.Server;
     }
 
     public override void Dispose()

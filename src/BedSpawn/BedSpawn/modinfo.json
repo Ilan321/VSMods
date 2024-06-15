@@ -5,9 +5,9 @@
     "authors": [
       "ilan"
     ],
-    "side": "Universal",
+    "side": "Server",
     "description": "Sets your \"return point\" when you sleep in a bed.",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "dependencies": {
         "game": "1.19.8"
     }

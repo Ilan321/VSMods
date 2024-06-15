@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using BedSpawn.Configuration;
 using HarmonyLib;
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
@@ -9,6 +10,8 @@ namespace BedSpawn;
 
 public class BedSpawnModSystem : ModSystem
 {
+    internal static BedSpawnConfig Config { get; private set; }
+
     private Harmony _harmony;
 
     public override void Start(ICoreAPI api)
@@ -19,6 +22,8 @@ public class BedSpawnModSystem : ModSystem
 
         if (api.Side == EnumAppSide.Server)
         {
+            Config = ModConfig.ReadConfig(api);
+
             _harmony.PatchCategory("Server");
         }
     }
@@ -111,6 +116,13 @@ public class BedSpawnModSystem : ModSystem
         var block = player.Entity.World.BlockAccessor.GetBlock(sel.Position);
 
         if (block is not BlockBed)
+        {
+            return;
+        }
+
+        var blockCode = $"{block.FirstCodePart()}-{block.FirstCodePart(1)}";
+
+        if (Config.BlacklistedBeds.Contains(blockCode))
         {
             return;
         }

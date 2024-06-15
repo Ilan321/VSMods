@@ -14,16 +14,18 @@ public static class ModConfig
             {
                 api.Logger.Debug("Generating configuration for Metal Recycling..");
 
-                GenerateConfig(api);
+                SaveOrCreateConfig(api);
 
                 config = LoadConfig(api);
             }
+
+            SaveOrCreateConfig(api, config);
 
             return config;
         }
         catch
         {
-            GenerateConfig(api);
+            SaveOrCreateConfig(api);
 
             return LoadConfig(api);
         }
@@ -34,8 +36,8 @@ public static class ModConfig
         return api.LoadModConfig<MetalRecyclingConfig>(ModConstants.ConfigFileName);
     }
 
-    private static void GenerateConfig(ICoreAPI api)
+    private static void SaveOrCreateConfig(ICoreAPI api, MetalRecyclingConfig config = default)
     {
-        api.StoreModConfig(new MetalRecyclingConfig(), ModConstants.ConfigFileName);
+        api.StoreModConfig(config ?? new(), ModConstants.ConfigFileName);
     }
 }

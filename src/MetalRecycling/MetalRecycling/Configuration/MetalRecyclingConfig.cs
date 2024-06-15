@@ -16,4 +16,9 @@ public class MetalRecyclingConfig
     /// The "factor" of diminishing returns that affects the recycle chance on every successful bit recovery. Defaults to 0.85.
     /// </summary>
     public float DiminishingReturnFactor { get; set; } = 0.85f;
+
+    /// <summary>
+    /// Whether you get iron bits from recycling iron blooms. Defaults to true.
+    /// </summary>
+    public bool RecycleIronBlooms { get; set; } = true;
 }

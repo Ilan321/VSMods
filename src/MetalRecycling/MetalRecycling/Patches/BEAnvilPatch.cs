@@ -15,6 +15,7 @@ public static class BEAnvilPatch
 {
     private const string TemperatureAttributeKey = "temperature";
     private const string MetalBitCodePrefix = "metalbit-";
+    private const string IronBitItemCode = "metalbit-iron";
 
     // ReSharper disable once UnusedMember.Global
     public static bool Prefix(BlockEntityAnvil __instance, Vec3i voxelPos)
@@ -49,13 +50,12 @@ public static class BEAnvilPatch
             return true;
         }
 
-        var itemType = __instance.WorkItemStack.Item.LastCodePart(); // workitem-copper -> copper
+        var bitStack = GetRecycledMetalBitStack(__instance);
 
-        var bitCode = MetalBitCodePrefix + itemType;
-
-        var bitItem = api.World.GetItem(new AssetLocation(bitCode));
-
-        var bitStack = new ItemStack(bitItem);
+        if (bitStack is null)
+        {
+            return true;
+        }
 
         var temperatureAttribute = __instance.WorkItemStack
                                              .Attributes[TemperatureAttributeKey];
@@ -76,6 +76,32 @@ public static class BEAnvilPatch
         IncRecycleCount(__instance.WorkItemStack);
 
         return true;
+    }
+
+    /// <summary>
+    /// Gets the metal bit ItemStack to eject out of the anvil. Can return null if no metal bit is to be ejected.
+    /// </summary>
+    private static ItemStack GetRecycledMetalBitStack(BlockEntityAnvil instance)
+    {
+        if (instance.WorkItemStack.Item is not ItemIronBloom)
+        {
+            var itemType = instance.WorkItemStack.Item.LastCodePart(); // workitem-copper -> copper
+
+            var bitCode = MetalBitCodePrefix + itemType;
+
+            var bitItem = instance.Api.World.GetItem(new AssetLocation(bitCode));
+
+            return bitItem is null ? null : new ItemStack(bitItem);
+        }
+
+        if (!MetalRecyclingModSystem.Config.RecycleIronBlooms)
+        {
+            // If it's an iron bloom and we don't want to recycle them, skip
+
+            return null;
+        }
+
+        return new ItemStack(instance.Api.World.GetItem(new AssetLocation(IronBitItemCode)));
     }
 
     /// <summary>

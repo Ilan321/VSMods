@@ -79,11 +79,6 @@ public class BedSpawnModSystem : ModSystem
         BlockPos pos
     )
     {
-        if (world.Side != EnumAppSide.Server)
-        {
-            return;
-        }
-
         var normalizedPosition = GetNormalizedBedPosition(block, pos);
 
         var playersWithThisSpawn = world

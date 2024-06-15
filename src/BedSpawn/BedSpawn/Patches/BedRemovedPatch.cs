@@ -18,6 +18,11 @@ public class BedRemovedPatch
         BlockPos pos
     )
     {
+        if (world.Api.Side != EnumAppSide.Server)
+        {
+            return;
+        }
+
         var modSystem = world.Api.ModLoader.GetModSystem<BedSpawnModSystem>();
 
         modSystem.OnBlockRemoved(

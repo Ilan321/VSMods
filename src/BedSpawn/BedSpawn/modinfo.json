@@ -5,7 +5,7 @@
     "authors": [
       "ilan"
     ],
-    "side": "Server",
+    "side": "Universal",
     "description": "Sets your \"return point\" when you sleep in a bed.",
     "version": "1.1.0",
     "dependencies": {

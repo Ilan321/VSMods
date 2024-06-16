@@ -1,0 +1,7 @@
+{
+  "foundOldMods": "[VersionChecker] Found {0} out-of-date mods: (<a href=\"{1}\">update all</a>)",
+  "foundOldMod": "[VersionChecker] Found 1 out-of-date mod:",
+  "modVersionItem": "• {0} - Current: {1}, Latest: {2} (<a href=\"{3}\">mod page</a>, <a href=\"{4}\">update</a>)",
+  "cmdUnsnoozeSuccess": "Unsnoozed version check alert",
+  "cmdSnoozeSuccess": "Snoozed version check alert for {0} minutes"
+}

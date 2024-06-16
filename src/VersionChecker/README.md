@@ -1,6 +1,6 @@
 # Version Checker
 
-![mod icon](https://raw.githubusercontent.com/Ilan321/VSMods/master/src/VersionChecker/Checker/modicon.png)
+![mod icon](https://raw.githubusercontent.com/Ilan321/VSMods/master/src/VersionChecker/VersionChecker/modicon.png)
 
 Check this out on the [VS Mod DB](https://mods.vintagestory.at/versionchecker)!
 

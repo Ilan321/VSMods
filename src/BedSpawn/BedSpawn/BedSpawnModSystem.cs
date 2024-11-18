@@ -30,8 +30,6 @@ public class BedSpawnModSystem : ModSystem
 
     public override void StartServerSide(ICoreServerAPI api)
     {
-        api.Event.DidUseBlock += OnBlockUsed;
-
         api.ChatCommands
            .Create("set-fatigue")
            .WithDescription("Sets the calling player's fatigue to the specified amount (defaults to 8)")
@@ -106,7 +104,7 @@ public class BedSpawnModSystem : ModSystem
     /// <summary>
     /// Check if the block is a bed, and if it is, set the player's spawn point to the bed's location.
     /// </summary>
-    private void OnBlockUsed(IServerPlayer player, BlockSelection sel)
+    public void SetPlayerSpawn(IServerPlayer player, BlockSelection sel, bool wasSneaking)
     {
         var block = player.Entity.World.BlockAccessor.GetBlock(sel.Position);
 
@@ -118,6 +116,11 @@ public class BedSpawnModSystem : ModSystem
         var blockCode = $"{block.FirstCodePart()}-{block.FirstCodePart(1)}";
 
         if (Config.BlacklistedBeds.Contains(blockCode))
+        {
+            return;
+        }
+
+        if (Config.RequireSneaking && !wasSneaking)
         {
             return;
         }

@@ -46,16 +46,16 @@ public class VersionCheckerModSystem : ModSystem
         };
 
         api.ChatCommands
-           .Create("versionchecker")
-           .WithDesc("VersionChecker related commands")
-           .BeginSubCommand("snooze")
-           .WithDescription("Snoozes the version check alert (by default, for 24 hours)")
-           .HandleWith(OnSnoozeCommandCalled)
-           .EndSubCommand()
-           .BeginSubCommand("unsnooze")
-           .WithDescription("Resets the snooze on the version check alert")
-           .HandleWith(OnUnsnoozeCommandCalled)
-           .EndSubCommand();
+            .Create("versionchecker")
+            .WithDesc("VersionChecker related commands")
+            .BeginSubCommand("snooze")
+            .WithDescription("Snoozes the version check alert (by default, for 24 hours)")
+            .HandleWith(OnSnoozeCommandCalled)
+            .EndSubCommand()
+            .BeginSubCommand("unsnooze")
+            .WithDescription("Resets the snooze on the version check alert")
+            .HandleWith(OnUnsnoozeCommandCalled)
+            .EndSubCommand();
     }
 
     private TextCommandResult OnUnsnoozeCommandCalled(TextCommandCallingArgs args)
@@ -107,16 +107,19 @@ public class VersionCheckerModSystem : ModSystem
 
         var screenManager = ClientProgram.screenManager;
 
-        if (ReflectionUtils.GetField<GuiScreen>(screenManager, "CurrentScreen") is GuiScreenRunningGame runningGameScreen)
+        if (ReflectionUtils.GetField<GuiScreen>(screenManager, "CurrentScreen") is GuiScreenRunningGame
+            runningGameScreen)
         {
             runningGameScreen.ExitOrRedirect(reason: "versionchecker updateallmods request");
 
             TyronThreadPool.QueueTask(
-                (Action) (() =>
+                (Action)(() =>
                 {
                     var num = 0;
 
-                    while (num++ < 1000 && ReflectionUtils.GetField<GuiScreen>(screenManager, "CurrentScreen") is not GuiScreenMainRight)
+                    while (num++ < 1000 &&
+                           ReflectionUtils.GetField<GuiScreen>(screenManager,
+                               "CurrentScreen") is not GuiScreenMainRight)
                     {
                         Thread.Sleep(100);
                     }
@@ -130,8 +133,8 @@ public class VersionCheckerModSystem : ModSystem
         }
 
         var modids = obj.Href
-                        .Replace($"{UpdateAllModsLinkProtocol}://", string.Empty)
-                        .Split(',');
+            .Replace($"{UpdateAllModsLinkProtocol}://", string.Empty)
+            .Split(',');
 
         string dataPathMods = GamePaths.DataPathMods;
 
@@ -202,12 +205,14 @@ public class VersionCheckerModSystem : ModSystem
         var sb = new StringBuilder();
 
         var oldMods = report.Mods
-                            .Where(f => f.CurrentVersion < f.LatestVersion)
-                            .OrderBy(f => f.ModName)
-                            .ToList();
+            .Where(f => f.CurrentVersion < f.LatestVersion)
+            .OrderBy(f => f.ModName)
+            .ToList();
 
-        Mod.Logger.Debug($"Building version check report with {oldMods.Count} out-of-date mods: {string.Join(", ", oldMods.Select(f => f.ModId))}");
-        Mod.Logger.Debug($"(ignored {report.IgnoredMods.Count} mods: {string.Join(", ", report.IgnoredMods.Select(f => f.Info.ModID))})");
+        Mod.Logger.Debug(
+            $"Building version check report with {oldMods.Count} out-of-date mods: {string.Join(", ", oldMods.Select(f => f.ModId))}");
+        Mod.Logger.Debug(
+            $"(ignored {report.IgnoredMods.Count} mods: {string.Join(", ", report.IgnoredMods.Select(f => f.Info.ModID))})");
 
         if (oldMods.Count > 1)
         {
@@ -234,7 +239,7 @@ public class VersionCheckerModSystem : ModSystem
                     mod.ModName,
                     mod.CurrentVersion,
                     mod.LatestVersion,
-                    $"https://mods.vintagestory.at/{mod.ModId}",
+                    $"https://mods.vintagestory.at/{mod.UrlAlias}",
                     $"{ModUpdateLinkProtocol}://{mod.ModId}@{mod.LatestVersion}"
                 )
             );
@@ -287,7 +292,8 @@ public class VersionCheckerModSystem : ModSystem
 
             if (!response.IsSuccessStatusCode)
             {
-                Mod.Logger.Warning($"Failed to fetch mod info for {mod.Info.ModID}, API returned non-success: {response.StatusCode}");
+                Mod.Logger.Warning(
+                    $"Failed to fetch mod info for {mod.Info.ModID}, API returned non-success: {response.StatusCode}");
 
                 return null;
             }
@@ -301,7 +307,8 @@ public class VersionCheckerModSystem : ModSystem
 
             if (responseContent is not { StatusCode: "200" })
             {
-                Mod.Logger.Warning($"Failed to fetch mod info for {mod.Info.ModID}, API returned non-success: {responseContent?.StatusCode}");
+                Mod.Logger.Warning(
+                    $"Failed to fetch mod info for {mod.Info.ModID}, API returned non-success: {responseContent?.StatusCode}");
 
                 return null;
             }
@@ -315,20 +322,44 @@ public class VersionCheckerModSystem : ModSystem
                 return null;
             }
 
+            var currentGameVersion = SemVer.Parse(GameVersion.APIVersion);
             var currentVersion = SemVer.Parse(mod.Info.Version);
 
-            var latestVersion = modInfo
-                                .Releases
-                                .Select(f => SemVer.Parse(f.ModVersion))
-                                .OrderByDescending(f => f)
-                                .First();
+            var modReleases = modInfo.Releases;
+
+            Mod.Logger.Debug(
+                $"Found {modReleases.Count} releases for mod {mod.Info.ModID}, filtering by game version {currentGameVersion}");
+
+            var modReleasesForThisGameVersion = modReleases
+                .Where(f => f.Tags.Any(t =>
+                    IsModTagCompatibleWithGameVersion(
+                        currentGameVersion,
+                        SemVer.Parse(t.TrimStart('v'))
+                    )
+                ))
+                .ToList();
+
+            Mod.Logger.Debug($"Applicable releases for {mod.Info.ModID} for game version {currentGameVersion}: {modReleasesForThisGameVersion.Count}");
+
+            var latestVersion = modReleasesForThisGameVersion
+                .Select(f => SemVer.Parse(f.ModVersion))
+                .OrderByDescending(f => f)
+                .FirstOrDefault();
+
+            Mod.Logger.Debug($"Found latest version for {mod.Info.ModID}: {latestVersion}");
+
+            if (latestVersion is null)
+            {
+                return null;
+            }
 
             return new VersionCheckMod
             {
                 ModId = mod.Info.ModID,
                 ModName = mod.Info.Name,
                 CurrentVersion = currentVersion,
-                LatestVersion = latestVersion
+                LatestVersion = latestVersion,
+                UrlAlias = modInfo.UrlAlias
             };
         }
         catch (Exception ex)
@@ -339,4 +370,7 @@ public class VersionCheckerModSystem : ModSystem
             return null;
         }
     }
+
+    private bool IsModTagCompatibleWithGameVersion(SemVer gameVersion, SemVer releaseVersion) =>
+        gameVersion.Major == releaseVersion.Major && gameVersion.Minor == releaseVersion.Minor;
 }

@@ -37,8 +37,6 @@ public static class BEAnvilPatch
             return true;
         }
 
-        var api = __instance.Api;
-
         var chance = GetRecycleChance(__instance.WorkItemStack);
 
         var rng = Random.Shared.NextDouble();

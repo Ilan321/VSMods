@@ -7,8 +7,8 @@
     ],
     "side": "Universal",
     "description": "Sets your \"return point\" when you sleep in a bed.",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "dependencies": {
-        "game": "1.19.8"
+        "game": "1.20.3"
     }
 }

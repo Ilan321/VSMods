@@ -6,9 +6,9 @@
     "ilan"
   ],
   "description": "Changes the prospecting pick to only require 1 sample instead of 3",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "side": "Universal",
   "dependencies": {
-    "game": "1.19.8"
+    "game": "1.20.3"
   }
 }

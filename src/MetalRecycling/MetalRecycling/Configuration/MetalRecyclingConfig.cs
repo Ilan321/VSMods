@@ -21,4 +21,14 @@ public class MetalRecyclingConfig
     /// Whether you get iron bits from recycling iron blooms. Defaults to true.
     /// </summary>
     public bool RecycleIronBlooms { get; set; } = true;
+
+    /// <summary>
+    /// Whether to reduce the number of bits you get from chiseling unfinished work items, to avoid metal bit duplication. Defaults to true.
+    /// </summary>
+    public bool ReduceChiselingBits { get; set; } = true;
+
+    /// <summary>
+    /// Whether metal bits that are successfully recovered inherit the temperature of the work item they came from.
+    /// </summary>
+    public bool InheritWorkItemTemperature { get; set; } = true;
 }

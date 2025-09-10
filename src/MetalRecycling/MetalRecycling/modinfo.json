@@ -6,7 +6,7 @@
         "ilan"
     ],
     "description": "Gives a chance to recover some metal bits when smithing",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "side": "Server",
     "dependencies": {
         "game": "1.21.1"

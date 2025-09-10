@@ -55,12 +55,15 @@ public static class BEAnvilPatch
             return true;
         }
 
-        var temperatureAttribute = __instance.WorkItemStack
-                                             .Attributes[TemperatureAttributeKey];
-
-        if (temperatureAttribute is not null)
+        if (MetalRecyclingModSystem.Config.InheritWorkItemTemperature)
         {
-            bitStack.Attributes[TemperatureAttributeKey] = temperatureAttribute.Clone();
+            var temperatureAttribute = __instance.WorkItemStack
+                .Attributes[TemperatureAttributeKey];
+
+            if (temperatureAttribute is not null)
+            {
+                bitStack.Attributes[TemperatureAttributeKey] = temperatureAttribute.Clone();
+            }
         }
 
         var bitPos = __instance.Pos.AddCopy(
@@ -94,7 +97,7 @@ public static class BEAnvilPatch
 
         if (!MetalRecyclingModSystem.Config.RecycleIronBlooms)
         {
-            // If it's an iron bloom and we don't want to recycle them, skip
+            // If it's an iron bloom, and we don't want to recycle them, skip
 
             return null;
         }

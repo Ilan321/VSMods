@@ -19,9 +19,10 @@ public static class InventoryCraftingGridPatch
     {
         __state = 0;
 
+        if (recipe?.Output is null) return true;
         if (!MetalRecyclingModSystem.Config.ReduceChiselingBits) return true;
 
-        var workItem = __instance.FirstOrDefault(f => f.Itemstack?.Item.Code.PathStartsWith("workitem-") == true);
+        var workItem = __instance.FirstOrDefault(f => f.Itemstack?.Item?.Code?.PathStartsWith("workitem-") == true);
 
         if (workItem is null) return true;
 

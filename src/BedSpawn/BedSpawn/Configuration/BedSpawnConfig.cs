@@ -20,6 +20,11 @@ public class BedSpawnConfig
     /// Gets or sets whether to show debug messages when attempting to use a bed (and it fails to set your spawn).
     /// </summary>
     public bool EnableDebugMessages { get; set; }
+
+    /// <summary>
+    /// Whether the player should be notified when their bed has been destroyed (when they respawn)
+    /// </summary>
+    public bool NotifyPlayerOnBedDestroyed { get; set; } = true;
 }
 
 public class BedSpawnRoomConfig

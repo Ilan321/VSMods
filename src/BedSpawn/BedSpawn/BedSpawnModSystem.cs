@@ -11,25 +11,14 @@ namespace BedSpawn;
 public class BedSpawnModSystem : ModSystem
 {
     internal static BedSpawnConfig Config { get; private set; }
-
-    private Harmony _harmony;
-
-    public override void Start(ICoreAPI api)
-    {
-        base.Start(api);
-
-        _harmony = new Harmony(ModConstants.ModId);
-
-        if (api.Side == EnumAppSide.Server)
-        {
-            Config = ModConfig.ReadConfig(api);
-
-            _harmony.PatchCategory("Server");
-        }
-    }
+    internal static readonly Harmony _harmony = new(ModConstants.ModId);
 
     public override void StartServerSide(ICoreServerAPI api)
     {
+        Config = ModConfig.ReadConfig(api);
+
+        _harmony.PatchCategory("Server");
+
         api.ChatCommands
             .Create("set-fatigue")
             .WithDescription("Sets the calling player's fatigue to the specified amount (defaults to 8)")
@@ -43,6 +32,8 @@ public class BedSpawnModSystem : ModSystem
             .RequiresPrivilege(Privilege.root)
             .RequiresPlayer()
             .HandleWith(SetFatigueHandler);
+
+        api.Event.PlayerRespawn += Event_OnPlayerRespawn;
 
         base.StartServerSide(api);
     }
@@ -97,6 +88,9 @@ public class BedSpawnModSystem : ModSystem
         foreach (var player in playersWithThisSpawn)
         {
             player.ClearSpawnPosition();
+
+            player.WorldData.SetModData(ModWorldData.BedMissing, true);
+            player.BroadcastPlayerData();
         }
     }
 
@@ -170,6 +164,9 @@ public class BedSpawnModSystem : ModSystem
             )
         );
 
+        player.WorldData.SetModData(ModWorldData.BedMissing, false);
+        player.BroadcastPlayerData();
+
         player.SendLocalisedMessage(0, $"{ModConstants.ModId}:msgSpawnSet");
     }
 
@@ -214,6 +211,19 @@ public class BedSpawnModSystem : ModSystem
             .Opposite;
 
         return pos.AddCopy(headFacing);
+    }
+
+    private void Event_OnPlayerRespawn(IServerPlayer player)
+    {
+        if (player is null) return;
+        if (!player.WorldData.GetModData<bool>(ModWorldData.BedMissing)) return;
+
+        player.WorldData.SetModData(ModWorldData.BedMissing, false);
+        player.BroadcastPlayerData();
+
+        if (!Config.NotifyPlayerOnBedDestroyed) return;
+
+        player.SendLocalisedMessage(0, $"{ModConstants.ModId}:msgBedMissing");
     }
 
     public override void Dispose()

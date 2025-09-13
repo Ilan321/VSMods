@@ -172,7 +172,7 @@ public class BedSpawnModSystem : ModSystem
                 var nowDays = player.Entity.World.Calendar.TotalDays;
                 var diff = nowDays - prevDays;
 
-                if (diff < Config.Cooldown.CooldownDays!.Value)
+                if (diff < Config.Cooldown.CooldownDays)
                 {
                     if (Config.EnableDebugMessages)
                     {

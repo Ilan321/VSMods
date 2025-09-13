@@ -49,10 +49,13 @@ public class BedSpawnRoomConfig
 
 public class BedSpawnCooldownConfig
 {
-    public bool Enabled => CooldownDays.HasValue;
+    /// <summary>
+    /// Whether to enable the cooldown mechanic.
+    /// </summary>
+    public bool Enabled { get; set; }
 
     /// <summary>
     /// How many days the player has to wait before they can set their spawn again. Optional.
     /// </summary>
-    public float? CooldownDays { get; set; }
+    public float CooldownDays { get; set; }
 }

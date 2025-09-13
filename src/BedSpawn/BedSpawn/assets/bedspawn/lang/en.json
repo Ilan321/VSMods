@@ -1,5 +1,5 @@
 {
   "msgSpawnSet": "Spawn point has been set",
   "msgBedMissing": "Your home bed has been destroyed",
-  "dbgBedNotInRoom": "Unable to set spawn point - bed is too exposed
+  "dbgBedNotInRoom": "Unable to set spawn point - bed is too exposed"
 }

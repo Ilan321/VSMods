@@ -7,10 +7,30 @@ public class BedSpawnConfig
     /// <summary>
     /// Gets or sets the list of beds that are blacklisted from being used as spawn points.
     /// </summary>
-    public List<string> BlacklistedBeds { get; set; } = new();
+    public List<string> BlacklistedBeds { get; set; } = [];
 
     /// <summary>
     /// Gets or sets whether sneaking is required to set a spawn point.
     /// </summary>
     public bool RequireSneaking { get; set; }
+
+    public BedSpawnRoomConfig Rooms { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets whether to show debug messages when attempting to use a bed (and it fails to set your spawn).
+    /// </summary>
+    public bool EnableDebugMessages { get; set; }
+}
+
+public class BedSpawnRoomConfig
+{
+    /// <summary>
+    /// Whether to require a room for the spawn to be set.
+    /// </summary>
+    public bool Enabled { get; set; }
+
+    /// <summary>
+    /// Any beds in this list will still set your spawn, even if they're not in a room.
+    /// </summary>
+    public List<string> BedsThatDontRequireRooms { get; set; } = [];
 }

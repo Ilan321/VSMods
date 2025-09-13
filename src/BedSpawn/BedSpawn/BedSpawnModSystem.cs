@@ -31,18 +31,18 @@ public class BedSpawnModSystem : ModSystem
     public override void StartServerSide(ICoreServerAPI api)
     {
         api.ChatCommands
-           .Create("set-fatigue")
-           .WithDescription("Sets the calling player's fatigue to the specified amount (defaults to 8)")
-           .WithArgs(
-               new FloatArgParser(
-                   "fatigue",
-                   8f,
-                   false
-               )
-           )
-           .RequiresPrivilege(Privilege.root)
-           .RequiresPlayer()
-           .HandleWith(SetFatigueHandler);
+            .Create("set-fatigue")
+            .WithDescription("Sets the calling player's fatigue to the specified amount (defaults to 8)")
+            .WithArgs(
+                new FloatArgParser(
+                    "fatigue",
+                    8f,
+                    false
+                )
+            )
+            .RequiresPrivilege(Privilege.root)
+            .RequiresPlayer()
+            .HandleWith(SetFatigueHandler);
 
         base.StartServerSide(api);
     }
@@ -80,14 +80,13 @@ public class BedSpawnModSystem : ModSystem
         var normalizedPosition = GetNormalizedBedPosition(block, pos);
 
         var playersWithThisSpawn = world
-                                   .AllPlayers
-                                   .OfType<IServerPlayer>()
-                                   .Where(
-                                       f => f.GetSpawnPosition(false)
-                                             .AsBlockPos
-                                            == normalizedPosition
-                                   )
-                                   .ToList();
+            .AllPlayers
+            .OfType<IServerPlayer>()
+            .Where(f => f.GetSpawnPosition(false)
+                            .AsBlockPos
+                        == normalizedPosition
+            )
+            .ToList();
 
         Mod.Logger.Debug(
             "Found {0} players with spawn point set to removed bed at {1}, clearing spawn position for these players",
@@ -104,7 +103,11 @@ public class BedSpawnModSystem : ModSystem
     /// <summary>
     /// Check if the block is a bed, and if it is, set the player's spawn point to the bed's location.
     /// </summary>
-    public void SetPlayerSpawn(IServerPlayer player, BlockSelection sel, bool wasSneaking)
+    public void SetPlayerSpawn(
+        IServerPlayer player,
+        BlockSelection sel,
+        bool wasSneaking
+    )
     {
         var block = player.Entity.World.BlockAccessor.GetBlock(sel.Position);
 
@@ -128,11 +131,27 @@ public class BedSpawnModSystem : ModSystem
         var normalizedPosition = GetNormalizedBedPosition(block, sel.Position);
 
         var currentSpawnPos = player.GetSpawnPosition(false)
-                                    .AsBlockPos;
+            .AsBlockPos;
 
         if (currentSpawnPos == normalizedPosition)
         {
             // They used the same bed, so don't do anything
+
+            return;
+        }
+
+        if (
+            Config.Rooms.Enabled &&
+            !Config.Rooms.BedsThatDontRequireRooms.Contains(blockCode) &&
+            !BlockInRoom(player.Entity.World.Api, normalizedPosition.UpCopy())
+        )
+        {
+            // Bed needs to be in a room, and it isn't - don't do anything
+
+            if (Config.EnableDebugMessages)
+            {
+                player.SendLocalisedMessage(0, $"{ModConstants.ModId}:dbgBedNotInRoom");
+            }
 
             return;
         }
@@ -154,6 +173,31 @@ public class BedSpawnModSystem : ModSystem
         player.SendLocalisedMessage(0, $"{ModConstants.ModId}:msgSpawnSet");
     }
 
+    private bool BlockInRoom(ICoreAPI api, BlockPos pos)
+    {
+        var roomRegistry = api.ModLoader.GetModSystem<RoomRegistry>();
+
+        if (roomRegistry is null)
+        {
+            Mod.Logger.Warning("Could not get room registry");
+
+            // Fail quietly
+
+            return true;
+        }
+
+        var skyExposed = api.World.BlockAccessor.GetRainMapHeightAt(pos.X, pos.Z) <= pos.Y;
+
+        if (skyExposed) return false;
+
+        var room = roomRegistry.GetRoomForPosition(pos);
+
+        if (room is null) return false;
+        if (room.ExitCount != 0) return false;
+
+        return true;
+    }
+
     /// <summary>
     /// Returns the position of the bed's head. If the input block is the bed's "feet", will return the position of the head.
     /// </summary>
@@ -167,7 +211,7 @@ public class BedSpawnModSystem : ModSystem
         var currentSide = bed.Variant["side"];
 
         var headFacing = BlockFacing.FromCode(currentSide)
-                                    .Opposite;
+            .Opposite;
 
         return pos.AddCopy(headFacing);
     }

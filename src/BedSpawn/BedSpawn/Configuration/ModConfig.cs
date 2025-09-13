@@ -19,6 +19,8 @@ public static class ModConfig
                 config = LoadConfig(api);
             }
 
+            // Re-save the config to add any missing properties to the json file
+
             SaveOrCreateConfig(api, config);
 
             return config;

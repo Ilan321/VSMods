@@ -1,5 +1,7 @@
 {
   "msgSpawnSet": "Spawn point has been set",
   "msgBedMissing": "Your home bed has been destroyed",
-  "dbgBedNotInRoom": "Unable to set spawn point - bed is too exposed"
+  "dbgBedNotInRoom": "Unable to set spawn point - bed is too exposed",
+  "dbgBedUnderSeaLevel": "Unable to set spawn point - bed is below sea level",
+  "dbgCooldownActive": "Unable to set spawn point - not enough time has passed since last spawn set"
 }

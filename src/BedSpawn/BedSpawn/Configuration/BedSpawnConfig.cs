@@ -25,6 +25,13 @@ public class BedSpawnConfig
     /// Whether the player should be notified when their bed has been destroyed (when they respawn)
     /// </summary>
     public bool NotifyPlayerOnBedDestroyed { get; set; } = true;
+
+    /// <summary>
+    /// Whether the player can set their spawn using a bed, below sea level (e.g. in a cave, dungeon, ruin)
+    /// </summary>
+    public bool DisableBelowSeaLevel { get; set; }
+
+    public BedSpawnCooldownConfig Cooldown { get; set; } = new();
 }
 
 public class BedSpawnRoomConfig
@@ -38,4 +45,14 @@ public class BedSpawnRoomConfig
     /// Any beds in this list will still set your spawn, even if they're not in a room.
     /// </summary>
     public List<string> BedsThatDontRequireRooms { get; set; } = [];
+}
+
+public class BedSpawnCooldownConfig
+{
+    public bool Enabled => CooldownDays.HasValue;
+
+    /// <summary>
+    /// How many days the player has to wait before they can set their spawn again. Optional.
+    /// </summary>
+    public float? CooldownDays { get; set; }
 }

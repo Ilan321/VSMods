@@ -150,6 +150,40 @@ public class BedSpawnModSystem : ModSystem
             return;
         }
 
+        if (
+            Config.DisableBelowSeaLevel && 
+            normalizedPosition.Y < player.Entity.World.SeaLevel
+            )
+        {
+            if (Config.EnableDebugMessages)
+            {
+                player.SendLocalisedMessage(0, $"{ModConstants.ModId}:dbgBedUnderSeaLevel");
+            }
+
+            return;
+        }
+
+        if (Config.Cooldown.Enabled)
+        {
+            var prevDays = player.WorldData.GetModData(ModWorldData.LastSetTime, -1d);
+
+            if (prevDays >= 0)
+            {
+                var nowDays = player.Entity.World.Calendar.TotalDays;
+                var diff = nowDays - prevDays;
+
+                if (diff < Config.Cooldown.CooldownDays!.Value)
+                {
+                    if (Config.EnableDebugMessages)
+                    {
+                        player.SendLocalisedMessage(0, $"{ModConstants.ModId}:dbgCooldownActive");
+                    }
+
+                    return;
+                }
+            }
+        }
+
         Mod.Logger.Debug(
             "Setting spawn position for {0} to {1}",
             player.PlayerName,
@@ -165,6 +199,8 @@ public class BedSpawnModSystem : ModSystem
         );
 
         player.WorldData.SetModData(ModWorldData.BedMissing, false);
+        player.WorldData.SetModData(ModWorldData.LastSetTime, player.Entity.World.Calendar.TotalDays);
+
         player.BroadcastPlayerData();
 
         player.SendLocalisedMessage(0, $"{ModConstants.ModId}:msgSpawnSet");

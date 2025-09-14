@@ -1,14 +1,12 @@
 {
-    "type": "code",
-    "modid": "versionchecker",
-    "name": "VersionChecker",
-    "authors": [
-        "ilan"
-    ],
-    "description": "Checks for updates for your mods and lets you auto-update them from within the game",
-    "version": "1.2.0",
-    "side": "Client",
-    "dependencies": {
-        "game": "1.21.1"
-    }
+  "type": "code",
+  "modid": "versionchecker",
+  "name": "VersionChecker",
+  "authors": ["ilan"],
+  "description": "Checks for updates for your mods and lets you auto-update them from within the game",
+  "version": "1.2.0",
+  "side": "Client",
+  "dependencies": {
+    "game": "1.21.0"
+  }
 }

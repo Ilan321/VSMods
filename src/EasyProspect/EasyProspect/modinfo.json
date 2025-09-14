@@ -2,13 +2,11 @@
   "type": "code",
   "modid": "easyprospect",
   "name": "EasyProspect",
-  "authors": [
-    "ilan"
-  ],
+  "authors": ["ilan"],
   "description": "Changes the prospecting pick to only require 1 sample instead of 3",
   "version": "1.2.0",
   "side": "Universal",
   "dependencies": {
-    "game": "1.21.1"
+    "game": "1.21.0"
   }
 }

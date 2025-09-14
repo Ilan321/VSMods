@@ -1,14 +1,12 @@
 {
-    "type": "code",
-    "modid": "bedspawnv2",
-    "name": "BedSpawn",
-    "authors": [
-      "ilan"
-    ],
-    "side": "Universal",
-    "description": "Sets your \"return point\" when you sleep in a bed.",
-    "version": "1.6.1",
-    "dependencies": {
-        "game": "1.21.1"
-    }
+  "type": "code",
+  "modid": "bedspawnv2",
+  "name": "BedSpawn",
+  "authors": ["ilan"],
+  "side": "Universal",
+  "description": "Sets your \"return point\" when you sleep in a bed.",
+  "version": "1.6.2",
+  "dependencies": {
+    "game": "1.21.0"
+  }
 }

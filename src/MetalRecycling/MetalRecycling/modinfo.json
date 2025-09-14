@@ -1,14 +1,12 @@
 {
-    "type": "code",
-    "modid": "metalrecycling",
-    "name": "MetalRecycling",
-    "authors": [
-        "ilan"
-    ],
-    "description": "Gives a chance to recover some metal bits when smithing",
-    "version": "1.4.1",
-    "side": "Server",
-    "dependencies": {
-        "game": "1.21.1"
-    }
+  "type": "code",
+  "modid": "metalrecycling",
+  "name": "MetalRecycling",
+  "authors": ["ilan"],
+  "description": "Gives a chance to recover some metal bits when smithing",
+  "version": "1.4.1",
+  "side": "Server",
+  "dependencies": {
+    "game": "1.21.0"
+  }
 }

@@ -2,13 +2,11 @@
   "type": "code",
   "modid": "metalunittooltip",
   "name": "Metal Unit Tooltip",
-  "authors": [
-    "ilan"
-  ],
+  "authors": ["ilan"],
   "side": "Client",
   "description": "Adds the total amount of metal units (and ingots) to nugget and ore tooltips",
   "version": "1.1.0",
   "dependencies": {
-    "game": "1.21.1"
+    "game": "1.21.0"
   }
 }

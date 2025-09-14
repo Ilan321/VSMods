@@ -4,7 +4,7 @@
   "name": "MetalRecycling",
   "authors": ["ilan"],
   "description": "Gives a chance to recover some metal bits when smithing",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "side": "Server",
   "dependencies": {
     "game": "1.21.0"

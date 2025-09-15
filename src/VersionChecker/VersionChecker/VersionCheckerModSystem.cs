@@ -239,7 +239,7 @@ public class VersionCheckerModSystem : ModSystem
                     mod.ModName,
                     mod.CurrentVersion,
                     mod.LatestVersion,
-                    $"https://mods.vintagestory.at/{mod.UrlAlias}",
+                    mod.Url,
                     $"{ModUpdateLinkProtocol}://{mod.ModId}@{mod.LatestVersion}"
                 )
             );
@@ -251,6 +251,7 @@ public class VersionCheckerModSystem : ModSystem
     private async Task<VersionCheckReport> GetLatestModVersion(ICoreClientAPI api)
     {
         var enabledMods = api.ModLoader.Mods;
+        var baseUrl = api.Settings.String.Get("modDbUrl")?.TrimEnd('/') ?? "https://mods.vintagestory.at";
 
         var bag = new ConcurrentBag<VersionCheckMod>();
         var filteredMods = new ConcurrentBag<Mod>();
@@ -266,7 +267,7 @@ public class VersionCheckerModSystem : ModSystem
                     return;
                 }
 
-                var latestModVersion = await GetLatestModVersion(mod);
+                var latestModVersion = await GetLatestModVersion(baseUrl, mod);
 
                 if (latestModVersion is not null)
                 {
@@ -282,11 +283,14 @@ public class VersionCheckerModSystem : ModSystem
         };
     }
 
-    private async Task<VersionCheckMod?> GetLatestModVersion(Mod mod)
+    private async Task<VersionCheckMod?> GetLatestModVersion(
+        string baseUrl,
+        Mod mod
+    )
     {
         try
         {
-            var requestUrl = $"https://mods.vintagestory.at/api/mod/{mod.Info.ModID}";
+            var requestUrl = $"{baseUrl}/api/mod/{mod.Info.ModID}";
 
             using var response = await _httpClient.GetAsync(requestUrl);
 
@@ -359,7 +363,8 @@ public class VersionCheckerModSystem : ModSystem
                 ModName = mod.Info.Name,
                 CurrentVersion = currentVersion,
                 LatestVersion = latestVersion,
-                UrlAlias = modInfo.UrlAlias
+                UrlAlias = modInfo.UrlAlias,
+                Url = $"{baseUrl}/{modInfo.UrlAlias}"
             };
         }
         catch (Exception ex)

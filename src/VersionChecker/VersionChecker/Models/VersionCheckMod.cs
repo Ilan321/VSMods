@@ -9,4 +9,5 @@ public class VersionCheckMod
     public required SemVer CurrentVersion { get; set; }
     public required SemVer LatestVersion { get; set; }
     public required string UrlAlias { get; set; }
+    public required string Url { get; set; }
 }

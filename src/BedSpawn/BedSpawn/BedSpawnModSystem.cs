@@ -266,6 +266,6 @@ public class BedSpawnModSystem : ModSystem
     {
         base.Dispose();
 
-        _harmony?.UnpatchAll();
+        _harmony?.UnpatchAll(_harmony?.Id);
     }
 }

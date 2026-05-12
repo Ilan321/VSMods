@@ -72,14 +72,17 @@ public class ProspectingPickPatch
             return false;
         }
 
-        // Damage the item twice, since it's damaged anyway in the original method
+        if (!EasyProspectModSystem.Config.TakeLessDurability)
+        {
+            // Damage the item twice, since it's damaged anyway in the original method
 
-        __instance.DamageItem(
-            world,
-            byEntity,
-            itemslot,
-            2
-        );
+            __instance.DamageItem(
+                world,
+                byEntity,
+                itemslot,
+                2
+            );
+        }
 
         return false;
     }

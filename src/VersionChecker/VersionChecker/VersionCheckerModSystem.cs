@@ -136,8 +136,6 @@ public class VersionCheckerModSystem : ModSystem
             .Replace($"{UpdateAllModsLinkProtocol}://", string.Empty)
             .Split(',');
 
-        string dataPathMods = GamePaths.DataPathMods;
-
         var mainScreen = ReflectionUtils.GetField<GuiScreenMainRight>(screenManager, "mainScreen");
 
         if (mainScreen is null)
@@ -148,9 +146,9 @@ public class VersionCheckerModSystem : ModSystem
         }
 
         screenManager.LoadScreen(
-            new GuiScreenDownloadMods(
-                null,
-                dataPathMods,
+            GuiScreenDownloadMods.ForServerMods(
+                null!,
+                null!,
                 modids.ToList(),
                 screenManager,
                 mainScreen
@@ -220,9 +218,9 @@ public class VersionCheckerModSystem : ModSystem
 
             sb.AppendLine(
                 Lang.Get(
-                    $"{ModConstants.ModId}:foundOldMods",
-                    oldMods.Count,
-                    $"{UpdateAllModsLinkProtocol}://{string.Join(",", modids)}"
+                    $"{ModConstants.ModId}:foundOldModsTemp",
+                    oldMods.Count
+                    //$"{UpdateAllModsLinkProtocol}://{string.Join(",", modids)}"
                 )
             );
         }
@@ -326,7 +324,7 @@ public class VersionCheckerModSystem : ModSystem
                 return null;
             }
 
-            var currentGameVersion = SemVer.Parse(GameVersion.APIVersion);
+            var currentGameVersion = SemVer.Parse(GameVersion.ShortGameVersion);
             var currentVersion = SemVer.Parse(mod.Info.Version);
 
             var modReleases = modInfo.Releases;

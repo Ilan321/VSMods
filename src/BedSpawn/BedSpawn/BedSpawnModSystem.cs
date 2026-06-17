@@ -11,7 +11,15 @@ namespace BedSpawn;
 public class BedSpawnModSystem : ModSystem
 {
     internal static BedSpawnConfig Config { get; private set; }
+    internal static BedSpawnModSystem Instance { get; private set; }
     internal static readonly Harmony _harmony = new(ModConstants.ModId);
+
+    public override void StartPre(ICoreAPI api)
+    {
+        base.StartPre(api);
+
+        Instance = this;
+    }
 
     public override void StartServerSide(ICoreServerAPI api)
     {

@@ -1,9 +1,11 @@
 ﻿using HarmonyLib;
+using ilanutils;
 using MetalRecycling.Configuration;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
 namespace MetalRecycling;
+
 public class MetalRecyclingModSystem : ModSystem
 {
     public static MetalRecyclingConfig Config { get; private set; }
@@ -14,7 +16,11 @@ public class MetalRecyclingModSystem : ModSystem
     {
         _harmony = new Harmony(ModConstants.ModId);
 
-        Config = ModConfig.ReadConfig(api);
+        Config = ModConfig.ReadConfig<MetalRecyclingConfig>(
+            api,
+            ModConstants.ConfigFileName,
+            Mod.Logger
+        );
 
         _harmony.PatchCategory("Server");
     }
@@ -28,6 +34,6 @@ public class MetalRecyclingModSystem : ModSystem
     {
         base.Dispose();
 
-        _harmony.UnpatchAll();
+        _harmony.UnpatchAll(ModConstants.ModId);
     }
 }

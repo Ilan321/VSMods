@@ -65,4 +65,8 @@
   </Content>
 </ItemGroup>
 
+<ItemGroup>
+  <ProjectReference Include="..\..\ilanutils\ilanutils.csproj" />
+</ItemGroup>
+
 </Project>
